@@ -1,0 +1,13 @@
+{
+  "extends": "@tsconfig/node18/tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "build",
+    "strict": false,
+    "module": "ESNext",
+    "moduleResolution": "Node"
+  },
+  "ts-node": {
+    "esm": true
+  }
+}
