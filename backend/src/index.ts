@@ -10,7 +10,6 @@ const app = express();
 
 try {
   await db.authenticate();
-  console.log("DB Connected...");
 } catch (error) {
   console.error(error);
 }
@@ -18,12 +17,13 @@ try {
 app.use(
   cors({
     credentials: true,
-    origin: "http://localhost:3000",
+    origin: `${process.env.APP_HOST}:${process.env.FRONTEND_PORT}`,
   })
 );
 app.use(cookieParser());
 app.use(express.json());
 app.use(router);
 
-const port = 5000;
-app.listen(port, () => console.log(`Server running at port ${port}`));
+app.listen(process.env.BACKEND_PORT, () =>
+  console.log(`Server running at port ${process.env.BACKEND_PORT}`)
+);
