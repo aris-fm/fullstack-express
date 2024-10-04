@@ -3,11 +3,13 @@ namespace NodeJS {
     ENV: "development" | "production";
     ACCESS_TOKEN_SECRET: string;
     REFRESH_TOKEN_SECRET: string;
-    DB_PORT: number;
+    DB_PORT: string;
     DB_HOST: string;
-    DB_LOGGING: boolean;
+    DB_USERNAME: string
+    DB_PASSWORD: string
+    DB_LOGGING: string;
     APP_HOST: URL;
-    BACKEND_PORT: number;
-    FRONTEND_PORT: number;
+    API_PORT: string;
+    APP_PORT: string;
   }
 }
