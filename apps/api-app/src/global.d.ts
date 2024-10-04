@@ -1,4 +1,4 @@
-namespace NodeJS {
+declare namespace NodeJS {
   interface ProcessEnv {
     ENV: "development" | "production";
     ACCESS_TOKEN_SECRET: string;
