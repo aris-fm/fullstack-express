@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import path from "path";
 
 dotenv.config({
-  path: path.resolve('../.env')
+  path: path.resolve('../../.env')
 });
 
 export const db = new Sequelize("auth_db", process.env.DB_USERNAME, process.env.DB_PASSWORD, {
