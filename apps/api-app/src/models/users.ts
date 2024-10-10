@@ -1,8 +1,10 @@
-import { DataTypes } from "sequelize";
-import { db } from "../config/Database.js";
-import { User } from "../types.js";
+import { DataTypes, type Model } from "sequelize"
+import { db } from "../config/db"
+import type { User } from "@/types"
 
-export const Users = db.define<User>(
+interface UserModel extends Model, User {}
+
+export const users = db.define<UserModel>(
   "users",
   {
     name: { type: DataTypes.STRING },
@@ -12,5 +14,5 @@ export const Users = db.define<User>(
   },
   {
     freezeTableName: true,
-  }
-);
+  },
+)

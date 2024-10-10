@@ -1,19 +1,10 @@
-import express from "express";
-import {
-  getUsers,
-  loginUser,
-  logout,
-  registerUser,
-} from "../controllers/Users.js";
-import { verifyToken } from "../middleware/verifyToken.js";
-import { refreshToken } from "../controllers/RefreshToken.js";
+import express from "express"
+import { authRouter } from "./auth"
+import { userRouter } from "./users"
 
-const router = express.Router();
+const router = express.Router()
 
-router.get("/users", verifyToken, getUsers);
-router.post("/users", registerUser);
-router.post("/login", loginUser);
-router.get("/token", refreshToken);
-router.delete("/logout", logout);
+router.use("/auth", authRouter)
+router.use("/users", userRouter)
 
-export default router;
+export default router

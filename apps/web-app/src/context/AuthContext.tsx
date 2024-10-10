@@ -1,11 +1,12 @@
-import React, {
+import {
   createContext,
   useContext,
   useState,
-  ReactNode,
+  type ReactNode,
   useEffect,
+  type FC,
 } from "react";
-import { loginRequest, logoutRequest, refreshToken } from "../apis/auth";
+import { loginRequest, logoutRequest, refreshToken } from "@/apis/auth";
 
 interface LoginData {
   email: string;
@@ -20,9 +21,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: ReactNode }> = ({
-  children,
-}) => {
+export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
@@ -50,7 +49,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   );
 };
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {

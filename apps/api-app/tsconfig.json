@@ -3,9 +3,24 @@
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "build",
-    "strict": false,
     "module": "ESNext",
-    "moduleResolution": "Node"
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
   "ts-node": {
     "esm": true
