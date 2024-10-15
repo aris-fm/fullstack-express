@@ -8,7 +8,7 @@ interface UserRegister extends Request {
 }
 
 export const registerUser = async (req: UserRegister, res: Response) => {
-  const { name, email, password, confPassword } = req.body;
+  const { name, email, password, confPassword, username } = req.body;
   if (password !== confPassword) {
     return res.status(400).json({ msg: "Password & Confirm Password didn't match" });
   }
@@ -19,6 +19,7 @@ export const registerUser = async (req: UserRegister, res: Response) => {
       name,
       email,
       password: hash,
+      username,
     });
     res.status(201).json({ msg: "Register success!" });
   } catch (error) {

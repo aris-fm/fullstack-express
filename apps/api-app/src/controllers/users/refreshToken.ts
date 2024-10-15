@@ -1,6 +1,7 @@
 import jwt, { type VerifyErrors } from "jsonwebtoken";
 import type { Request, Response } from "express";
 import { users } from "@/models/users";
+import { hourInMilis, oneHour } from "@/const/datetime";
 
 export const refreshToken = async (req: Request, res: Response) => {
   try {
@@ -16,11 +17,11 @@ export const refreshToken = async (req: Request, res: Response) => {
       if (err) return res.sendStatus(403);
       const { id, name, email } = user;
       const accessToken = jwt.sign({ id, name, email }, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: "1m",
+        expiresIn: oneHour,
       });
       res.cookie("accessToken", accessToken, {
         httpOnly: true,
-        maxAge: 60 * 1000,
+        maxAge: hourInMilis,
         secure: process.env.ENV !== "development",
       });
       res.json({ accessToken });

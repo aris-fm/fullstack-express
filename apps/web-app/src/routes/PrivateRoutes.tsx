@@ -1,9 +1,10 @@
-import { Navigate, Outlet } from "react-router-dom"
-import { useAuth } from "@/context/AuthContext"
+import { Navigate, Outlet } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
 
 export const PrivateRoutes = () => {
-  const { isAuthenticated } = useAuth()
-
-  if (!isAuthenticated) return <Navigate to="/login" replace />
-  return <Outlet />
-}
+  const { isAuthenticated, previousLocationPathname } = useAuth();
+  localStorage.setItem("initialUrl", previousLocationPathname);
+  console.log(previousLocationPathname);
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
+  return <Outlet />;
+};

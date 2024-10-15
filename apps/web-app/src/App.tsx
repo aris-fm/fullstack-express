@@ -8,8 +8,8 @@ import { AuthProvider } from "./context/AuthContext";
 
 function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
+    <BrowserRouter>
+      <AuthProvider>
         <Routes>
           <Route element={<PublicRoutes />}>
             <Route path="/login" Component={LoginPage} />
@@ -19,8 +19,8 @@ function App() {
             <Route path="/" Component={DashboardPage} />
           </Route>
         </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
 

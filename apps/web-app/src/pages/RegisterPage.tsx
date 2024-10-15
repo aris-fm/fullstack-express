@@ -1,18 +1,19 @@
-import { useReducer, useState } from "react"
-import type { UserRegister } from "@/types"
-import { createUsers } from "@/apis/users"
-import { useNavigate } from "react-router"
+import { useReducer, useState } from "react";
+import type { UserRegister } from "@/types";
+import { createUsers } from "@/apis/users";
+import { useNavigate } from "react-router";
 
 enum UserRegisterType {
   EDIT_NAME = "EDIT_NAME",
   EDIT_EMAIL = "EDIT_EMAIL",
   EDIT_PASSWORD = "EDIT_PASSWORD",
   EDIT_PASSWORD_CONFIRMATION = "EDIT_PASSWORD_CONFIRMATION",
+  EDIT_USERNAME = "EDIT_USERNAME",
 }
 
 interface UserRegisterAction {
-  type: UserRegisterType
-  payload: string
+  type: UserRegisterType;
+  payload: string;
 }
 
 const userData: UserRegister = {
@@ -20,7 +21,8 @@ const userData: UserRegister = {
   email: "",
   password: "",
   confPassword: "",
-}
+  username: "",
+};
 
 const reducer = (state: UserRegister, action: UserRegisterAction): UserRegister => {
   switch (action.type) {
@@ -28,46 +30,51 @@ const reducer = (state: UserRegister, action: UserRegisterAction): UserRegister 
       return {
         ...state,
         name: action.payload,
-      }
+      };
     case UserRegisterType.EDIT_EMAIL:
       return {
         ...state,
         email: action.payload,
-      }
+      };
     case UserRegisterType.EDIT_PASSWORD:
       return {
         ...state,
         password: action.payload,
-      }
+      };
     case UserRegisterType.EDIT_PASSWORD_CONFIRMATION:
       return {
         ...state,
         confPassword: action.payload,
-      }
+      };
+    case UserRegisterType.EDIT_USERNAME:
+      return {
+        ...state,
+        username: action.payload,
+      };
     default:
-      return state
+      return state;
   }
-}
+};
 
 const RegisterPage = () => {
-  const [state, dispatch] = useReducer(reducer, userData)
-  const [loading, setLoading] = useState(false)
-  const { name, email, password, confPassword } = state
-  const navigate = useNavigate()
+  const [state, dispatch] = useReducer(reducer, userData);
+  const [loading, setLoading] = useState(false);
+  const { name, email, password, confPassword, username } = state;
+  const navigate = useNavigate();
 
   const registerUser = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setLoading(true)
+    e.preventDefault();
+    setLoading(true);
     try {
       await createUsers(state).then(() => {
-        setLoading(false)
-        navigate("/login")
-      })
+        setLoading(false);
+        navigate("/login");
+      });
     } catch (error) {
-      console.error(error)
-      setLoading(false)
+      console.error(error);
+      setLoading(false);
     }
-  }
+  };
   return (
     <div className="hero bg-base-200 min-h-screen">
       <div className="hero-content text-center bg-slate-200 dark:bg-slate-800 p-16 rounded-lg shadow-md">
@@ -77,7 +84,7 @@ const RegisterPage = () => {
           <form onSubmit={registerUser}>
             <label className="form-control my-3" htmlFor="formName">
               <div className="label">
-                <span className="label-text">Email</span>
+                <span className="label-text">Full Name</span>
               </div>
               <input
                 type="text"
@@ -91,6 +98,25 @@ const RegisterPage = () => {
                   })
                 }
                 id="formName"
+              />
+            </label>
+
+            <label className="form-control my-3" htmlFor="formUserName">
+              <div className="label">
+                <span className="label-text">Username</span>
+              </div>
+              <input
+                type="text"
+                placeholder="Username"
+                className="input input-bordered w-full"
+                value={username}
+                onChange={(event) =>
+                  dispatch({
+                    type: UserRegisterType.EDIT_USERNAME,
+                    payload: event.target.value,
+                  })
+                }
+                id="formUserName"
               />
             </label>
 
@@ -145,7 +171,7 @@ const RegisterPage = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default RegisterPage
+export default RegisterPage;

@@ -1,14 +1,14 @@
-import { useState } from "react"
-import { useAuth } from "@/context/AuthContext"
+import { useState } from "react";
+import { useAuth } from "@/context/AuthContext";
 
 const LoginPage = () => {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const { login } = useAuth()
+  const [emailOrUsername, setEmailOrUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const { login } = useAuth();
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    login({ email, password })
-  }
+    e.preventDefault();
+    login({ emailOrUsername, password });
+  };
   return (
     <div className="hero bg-base-200 min-h-screen">
       <div className="hero-content text-center bg-slate-200 dark:bg-slate-800 p-16 rounded-lg shadow-md">
@@ -23,8 +23,8 @@ const LoginPage = () => {
                 type="text"
                 placeholder="name@email.com"
                 className="input input-bordered w-full"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
+                value={emailOrUsername}
+                onChange={(event) => setEmailOrUsername(event.target.value)}
                 id="formEmail"
               />
             </label>
@@ -46,7 +46,7 @@ const LoginPage = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default LoginPage
+export default LoginPage;

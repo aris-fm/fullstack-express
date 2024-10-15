@@ -1,15 +1,9 @@
-import {
-  createContext,
-  useContext,
-  useState,
-  type ReactNode,
-  useEffect,
-  type FC,
-} from "react";
+import { createContext, useContext, useState, type ReactNode, useEffect, type FC } from "react";
 import { loginRequest, logoutRequest, refreshToken } from "@/apis/auth";
+import { useLocation } from "react-router-dom";
 
 interface LoginData {
-  email: string;
+  emailOrUsername: string;
   password: string;
 }
 
@@ -17,12 +11,15 @@ interface AuthContextType {
   isAuthenticated: boolean;
   login: (loginData: LoginData) => void;
   logout: () => void;
+  previousLocationPathname: string;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { pathname, search } = useLocation();
+  const previousLocationPathname = `${pathname}${search}`;
 
   useEffect(() => {
     const checkAuthStatus = async () => {
@@ -34,8 +31,14 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
     checkAuthStatus();
   }, []);
 
-  const login = async ({ email, password }: LoginData) => {
-    const token = await loginRequest({ email, password });
+  const login = async ({ emailOrUsername, password }: LoginData) => {
+    const isEmail = emailOrUsername.includes("@");
+    // const body = {}
+    const token = await loginRequest({
+      ...(isEmail && { email: emailOrUsername }),
+      ...(!isEmail && { username: emailOrUsername }),
+      password,
+    });
     return token ? setIsAuthenticated(true) : setIsAuthenticated(false);
   };
   const logout = async () => {
@@ -43,7 +46,7 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, login, logout, previousLocationPathname }}>
       {children}
     </AuthContext.Provider>
   );
