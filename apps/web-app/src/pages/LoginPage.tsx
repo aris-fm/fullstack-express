@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { useAuth } from "@/context/AuthContext";
+import React, { useState } from "react";
+import { useAuth } from "@/context/AuthContext.tsx";
 
 const LoginPage = () => {
   const [emailOrUsername, setEmailOrUsername] = useState("");
   const [password, setPassword] = useState("");
   const { login } = useAuth();
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     login({ emailOrUsername, password });
   };
@@ -41,7 +41,11 @@ const LoginPage = () => {
                 onChange={(event) => setPassword(event.target.value)}
               />
             </label>
-            <input type="submit" value="Login" className="btn btn-block btn-primary my-3" />
+            <input
+              type="submit"
+              value="Login"
+              className="btn btn-block btn-primary my-3"
+            />
           </form>
         </div>
       </div>

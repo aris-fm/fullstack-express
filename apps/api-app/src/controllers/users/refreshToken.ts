@@ -1,7 +1,7 @@
 import jwt, { type VerifyErrors } from "jsonwebtoken";
 import type { Request, Response } from "express";
-import { users } from "@/models/users";
-import { hourInMilis, oneHour } from "@/const/datetime";
+import { users } from "../../models/users.ts";
+import { hourInMilis, oneHour } from "../../const/datetime.ts";
 
 export const refreshToken = async (req: Request, res: Response) => {
   try {
@@ -13,19 +13,27 @@ export const refreshToken = async (req: Request, res: Response) => {
       },
     });
     if (!user) return res.sendStatus(403);
-    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err: VerifyErrors | null) => {
-      if (err) return res.sendStatus(403);
-      const { id, name, email } = user;
-      const accessToken = jwt.sign({ id, name, email }, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: oneHour,
-      });
-      res.cookie("accessToken", accessToken, {
-        httpOnly: true,
-        maxAge: hourInMilis,
-        secure: process.env.ENV !== "development",
-      });
-      res.json({ accessToken });
-    });
+    jwt.verify(
+      refreshToken,
+      Deno.env.get("REFRESH_TOKEN_SECRET"),
+      (err: VerifyErrors | null) => {
+        if (err) return res.sendStatus(403);
+        const { id, name, email } = user;
+        const accessToken = jwt.sign(
+          { id, name, email },
+          Deno.env.get("ACCESS_TOKEN_SECRET"),
+          {
+            expiresIn: oneHour,
+          },
+        );
+        res.cookie("accessToken", accessToken, {
+          httpOnly: true,
+          maxAge: hourInMilis,
+          secure: Deno.env.get("ENV") !== "development",
+        });
+        res.json({ accessToken });
+      },
+    );
   } catch (error) {
     console.error(error);
   }

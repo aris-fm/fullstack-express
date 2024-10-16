@@ -1,14 +1,14 @@
 import { Sequelize } from "sequelize";
-import dotenv from "dotenv";
-import path from "node:path";
+import "jsr:@std/dotenv/load";
 
-dotenv.config({
-  path: path.resolve('../../.env')
-});
-
-export const db = new Sequelize("auth_db", process.env.DB_USERNAME, process.env.DB_PASSWORD, {
-  port: +process.env.DB_PORT,
-  dialect: "mysql",
-  host: process.env.DB_HOST,
-  logging: JSON.parse(process.env.DB_LOGGING),
-});
+export const db = new Sequelize(
+  "auth_db",
+  Deno.env.get("DB_USERNAME")!,
+  Deno.env.get("DB_PASSWORD"),
+  {
+    port: +Deno.env.get("DB_PORT")!,
+    dialect: "mysql",
+    host: Deno.env.get("DB_HOST"),
+    logging: JSON.parse(Deno.env.get("DB_LOGGING")!),
+  },
+);

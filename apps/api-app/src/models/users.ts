@@ -1,6 +1,6 @@
 import { DataTypes, type Model } from "sequelize";
-import { db } from "../config/db";
-import type { User } from "@/types";
+import { db } from "../config/db.ts";
+import type { User } from "../types.ts";
 
 interface UserModel extends Model, User {}
 

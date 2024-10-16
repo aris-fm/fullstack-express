@@ -1,14 +1,25 @@
-import type { BaseGetRequest, User, UserRegister, WithPagination } from "@/types";
-import { interceptedFetch } from "@/utils/fetchInterceptor";
-import { apiUrl } from "./urls";
+import type {
+  BaseGetRequest,
+  User,
+  UserRegister,
+  WithPagination,
+} from "@/types.ts";
+import { interceptedFetch } from "@/utils/fetchInterceptor.ts";
+import { apiUrl } from "@/apis/urls.ts";
 
-export const fetchUsers = async ({ limit = "", offset = "" }: BaseGetRequest = {}): Promise<WithPagination<User>> => {
-  const response = await interceptedFetch(`${apiUrl.users}?${new URLSearchParams({ limit, offset }).toString()}`);
+export const fetchUsers = async (
+  { limit = "", offset = "" }: BaseGetRequest = {},
+): Promise<WithPagination<User>> => {
+  const response = await interceptedFetch(
+    `${apiUrl.users}?${new URLSearchParams({ limit, offset }).toString()}`,
+  );
   const users: WithPagination<User> = await response.json();
   return users;
 };
 
-export const createUsers = async ({ email, name, confPassword, password, username }: UserRegister) => {
+export const createUsers = async (
+  { email, name, confPassword, password, username }: UserRegister,
+) => {
   try {
     const response = await fetch(apiUrl.users, {
       method: "POST",

@@ -1,9 +1,14 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import type { Request, Response } from "express";
-import { users } from "@/models/users";
-import type { User } from "@/types";
-import { hourInMilis, monthInMilis, oneHour, oneMonth } from "@/const/datetime";
+import { users } from "../../models/users.ts";
+import type { User } from "../../types.ts";
+import {
+  hourInMilis,
+  monthInMilis,
+  oneHour,
+  oneMonth,
+} from "../../const/datetime.ts";
 import { Op } from "sequelize";
 
 interface UserLogin extends Request {
@@ -18,17 +23,24 @@ export const login = async (req: UserLogin, res: Response) => {
         [Op.or]: [{ email: emailOrUsername }, { username: emailOrUsername }],
       },
     });
-    console.log("[log]", user);
     if (!user) return;
     const match = await bcrypt.compare(req.body.password, user.password);
     if (!match) res.status(400).json({ msg: "Wrong Password" });
     const { id, name, email } = user;
-    const accessToken = jwt.sign({ id, name, email }, process.env.ACCESS_TOKEN_SECRET, {
-      expiresIn: oneHour,
-    });
-    const refreshToken = jwt.sign({ id, name, email }, process.env.REFRESH_TOKEN_SECRET, {
-      expiresIn: oneMonth,
-    });
+    const accessToken = jwt.sign(
+      { id, name, email },
+      Deno.env.get("ACCESS_TOKEN_SECRET"),
+      {
+        expiresIn: oneHour,
+      },
+    );
+    const refreshToken = jwt.sign(
+      { id, name, email },
+      Deno.env.get("REFRESH_TOKEN_SECRET"),
+      {
+        expiresIn: oneMonth,
+      },
+    );
     await users.update(
       { refresh_token: refreshToken },
       {
@@ -40,12 +52,12 @@ export const login = async (req: UserLogin, res: Response) => {
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       maxAge: monthInMilis,
-      secure: process.env.ENV !== "development",
+      secure: Deno.env.get("ENV") !== "development",
     });
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
       maxAge: hourInMilis,
-      secure: process.env.ENV !== "development",
+      secure: Deno.env.get("ENV") !== "development",
     });
     res.json({ accessToken });
   } catch (error) {

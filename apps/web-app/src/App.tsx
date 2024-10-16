@@ -1,10 +1,11 @@
-import { Routes, Route, BrowserRouter } from "react-router-dom";
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
-import { PrivateRoutes } from "./routes/PrivateRoutes";
-import DashboardPage from "./pages/DashboardPage";
-import { PublicRoutes } from "./routes/PublicRoutes";
-import { AuthProvider } from "./context/AuthContext";
+import React from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import LoginPage from "@/pages/LoginPage.tsx";
+import RegisterPage from "@/pages/RegisterPage.tsx";
+import { PrivateRoutes } from "@/routes/PrivateRoutes.tsx";
+import DashboardPage from "@/pages/DashboardPage.tsx";
+import { PublicRoutes } from "@/routes/PublicRoutes.tsx";
+import { AuthProvider } from "@/context/AuthContext.tsx";
 
 function App() {
   return (

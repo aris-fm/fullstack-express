@@ -1,6 +1,6 @@
-import type { UserLogin } from "@/types";
-import type { RefreshTokenResponse } from "@/utils/fetchInterceptor";
-import { apiUrl } from "./urls";
+import type { UserLogin } from "@/types.ts";
+import type { RefreshTokenResponse } from "@/utils/fetchInterceptor.ts";
+import { apiUrl } from "@/apis/urls.ts";
 
 export const refreshToken = async (): Promise<RefreshTokenResponse> => {
   const response = await fetch(apiUrl.token, { credentials: "include" });
@@ -11,7 +11,9 @@ export const refreshToken = async (): Promise<RefreshTokenResponse> => {
   };
 };
 
-export const loginRequest = async ({ username, email, password }: Partial<UserLogin>) => {
+export const loginRequest = async (
+  { username, email, password }: Partial<UserLogin>,
+) => {
   try {
     const body = {
       ...(username && { username }),

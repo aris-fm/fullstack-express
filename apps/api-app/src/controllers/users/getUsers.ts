@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { users as usersModel } from "@/models/users";
+import { users as usersModel } from "../../models/users.ts";
 
 interface GetUsersParams extends Request {
   query: {

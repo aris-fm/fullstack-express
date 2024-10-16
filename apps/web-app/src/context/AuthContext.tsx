@@ -1,5 +1,12 @@
-import { createContext, useContext, useState, type ReactNode, useEffect, type FC } from "react";
-import { loginRequest, logoutRequest, refreshToken } from "@/apis/auth";
+import React, {
+  createContext,
+  type FC,
+  type ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { loginRequest, logoutRequest, refreshToken } from "@/apis/auth.ts";
 import { useLocation } from "react-router-dom";
 
 interface LoginData {
@@ -46,7 +53,9 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout, previousLocationPathname }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated, login, logout, previousLocationPathname }}
+    >
       {children}
     </AuthContext.Provider>
   );

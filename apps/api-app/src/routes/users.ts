@@ -1,9 +1,9 @@
-import express from "express"
-import { verifyToken } from "@/middleware/verifyToken"
-import { registerUser } from "@/controllers/users/registerUser"
-import { getUsers } from "@/controllers/users/getUsers"
+import express from "express";
+import { verifyToken } from "../middleware/verifyToken.ts";
+import { registerUser } from "../controllers/users/registerUser.ts";
+import { getUsers } from "../controllers/users/getUsers.ts";
 
-export const userRouter = express.Router()
+export const userRouter = express.Router();
 
-userRouter.get("/", verifyToken, getUsers)
-userRouter.post("/", registerUser)
+userRouter.get("/", verifyToken, getUsers);
+userRouter.post("/", registerUser);

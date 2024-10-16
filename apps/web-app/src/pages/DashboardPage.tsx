@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
-import { fetchUsers } from "@/apis/users";
-import type { User, WithPagination } from "@/types";
-import { useAuth } from "@/context/AuthContext";
+import React, { useEffect, useMemo, useState } from "react";
+import { fetchUsers } from "@/apis/users.ts";
+import type { User, WithPagination } from "@/types.ts";
+import { useAuth } from "@/context/AuthContext.tsx";
 import { useSearchParams } from "react-router-dom";
 
 const DEFAULT_LIMIT = 5;
@@ -13,8 +13,12 @@ const DashboardPage = () => {
 
   const [users, setUsers] = useState<WithPagination<User>>();
   const [currentPage, setCurrentPage] = useState(0);
-  const [offset, setOffset] = useState(params.get("offset") || String(DEFAULT_OFFSET));
-  const limit = useMemo(() => params.get("limit") || String(DEFAULT_LIMIT), [params]);
+  const [offset, setOffset] = useState(
+    params.get("offset") || String(DEFAULT_OFFSET),
+  );
+  const limit = useMemo(() => params.get("limit") || String(DEFAULT_LIMIT), [
+    params,
+  ]);
 
   useEffect(() => {
     fetchUsers({ offset, limit }).then(setUsers);
@@ -66,11 +70,19 @@ const DashboardPage = () => {
             </tbody>
           </table>
           <p>
-            <button type="button" disabled={currentPage <= 0} onClick={() => onChangePage(false)}>
+            <button
+              type="button"
+              disabled={currentPage <= 0}
+              onClick={() => onChangePage(false)}
+            >
               Prev
             </button>
             Page {currentPage + 1} of {totalPages}
-            <button type="button" disabled={currentPage === totalPages} onClick={() => onChangePage()}>
+            <button
+              type="button"
+              disabled={currentPage === totalPages}
+              onClick={() => onChangePage()}
+            >
               Next
             </button>
           </p>

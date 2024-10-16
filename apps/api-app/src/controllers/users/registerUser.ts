@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import type { Request, Response } from "express";
-import { users } from "@/models/users";
-import type { User } from "@/types";
+import { users } from "../../models/users.ts";
+import type { User } from "../../types.ts";
 
 interface UserRegister extends Request {
   body: Omit<User, "refreshToken"> & { confPassword: string };
@@ -10,7 +10,9 @@ interface UserRegister extends Request {
 export const registerUser = async (req: UserRegister, res: Response) => {
   const { name, email, password, confPassword, username } = req.body;
   if (password !== confPassword) {
-    return res.status(400).json({ msg: "Password & Confirm Password didn't match" });
+    return res.status(400).json({
+      msg: "Password & Confirm Password didn't match",
+    });
   }
   const salt = await bcrypt.genSalt();
   const hash = await bcrypt.hash(password, salt);

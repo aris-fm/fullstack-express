@@ -1,6 +1,6 @@
-import { useReducer, useState } from "react";
-import type { UserRegister } from "@/types";
-import { createUsers } from "@/apis/users";
+import React, { useReducer, useState } from "react";
+import type { UserRegister } from "@/types.ts";
+import { createUsers } from "@/apis/users.ts";
 import { useNavigate } from "react-router";
 
 enum UserRegisterType {
@@ -24,7 +24,10 @@ const userData: UserRegister = {
   username: "",
 };
 
-const reducer = (state: UserRegister, action: UserRegisterAction): UserRegister => {
+const reducer = (
+  state: UserRegister,
+  action: UserRegisterAction,
+): UserRegister => {
   switch (action.type) {
     case UserRegisterType.EDIT_NAME:
       return {
@@ -95,8 +98,7 @@ const RegisterPage = () => {
                   dispatch({
                     type: UserRegisterType.EDIT_NAME,
                     payload: event.target.value,
-                  })
-                }
+                  })}
                 id="formName"
               />
             </label>
@@ -114,8 +116,7 @@ const RegisterPage = () => {
                   dispatch({
                     type: UserRegisterType.EDIT_USERNAME,
                     payload: event.target.value,
-                  })
-                }
+                  })}
                 id="formUserName"
               />
             </label>
@@ -133,8 +134,7 @@ const RegisterPage = () => {
                   dispatch({
                     type: UserRegisterType.EDIT_EMAIL,
                     payload: event.target.value,
-                  })
-                }
+                  })}
                 id="formEmail"
               />
             </label>
@@ -148,7 +148,11 @@ const RegisterPage = () => {
                 className="input input-bordered w-full"
                 value={password}
                 id="formPass"
-                onChange={(event) => dispatch({ type: UserRegisterType.EDIT_PASSWORD, payload: event.target.value })}
+                onChange={(event) =>
+                  dispatch({
+                    type: UserRegisterType.EDIT_PASSWORD,
+                    payload: event.target.value,
+                  })}
               />
             </label>
             <label className="form-control my-3" htmlFor="formConfirmPass">
@@ -162,11 +166,18 @@ const RegisterPage = () => {
                 value={confPassword}
                 id="formConfirmPass"
                 onChange={(event) =>
-                  dispatch({ type: UserRegisterType.EDIT_PASSWORD_CONFIRMATION, payload: event.target.value })
-                }
+                  dispatch({
+                    type: UserRegisterType.EDIT_PASSWORD_CONFIRMATION,
+                    payload: event.target.value,
+                  })}
               />
             </label>
-            <input type="submit" disabled={loading} value="Register" className="btn btn-block btn-primary my-3" />
+            <input
+              type="submit"
+              disabled={loading}
+              value="Register"
+              className="btn btn-block btn-primary my-3"
+            />
           </form>
         </div>
       </div>

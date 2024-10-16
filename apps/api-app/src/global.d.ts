@@ -5,8 +5,8 @@ declare namespace NodeJS {
     REFRESH_TOKEN_SECRET: string;
     DB_PORT: string;
     DB_HOST: string;
-    DB_USERNAME: string
-    DB_PASSWORD: string
+    DB_USERNAME: string;
+    DB_PASSWORD: string;
     DB_LOGGING: string;
     APP_HOST: URL;
     API_PORT: string;

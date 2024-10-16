@@ -1,10 +1,10 @@
-import express from "express"
-import { authRouter } from "./auth"
-import { userRouter } from "./users"
+import express from "express";
+import { authRouter } from "./auth.ts";
+import { userRouter } from "./users.ts";
 
-const router = express.Router()
+const router = express.Router();
 
-router.use("/auth", authRouter)
-router.use("/users", userRouter)
+router.use("/auth", authRouter);
+router.use("/users", userRouter);
 
-export default router
+export default router;
