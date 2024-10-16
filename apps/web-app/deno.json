@@ -1,11 +1,23 @@
 {
   "imports": {
-    "@/": "./src/"
+    "@/": "./src/",
+    "axios": "npm:axios",
+    "jwt-decode": "npm:jwt-decode",
+    "react": "npm:react",
+    "react-dom": "npm:react-dom",
+    "react-router": "npm:react-router",
+    "react-router-dom": "npm:react-router-dom",
+    "@vitejs/plugin-react-swc": "npm:@vitejs/plugin-react-swc",
+    "autoprefixer": "npm:autoprefixer",
+    "daisyui": "npm:daisyui",
+    "postcss": "npm:postcss",
+    "tailwindcss": "npm:tailwindcss",
+    "@types/react": "npm:@types/react",
+    "@types/react-dom": "npm:@types/react-dom"
   },
-  "compilerOptions": {
-    "lib": [
-      "ESNext",
-      "DOM"
-    ]
+  "tasks": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview"
   }
 }

@@ -1,5 +1,20 @@
 {
   "compilerOptions": {
-    "strict": true
+    "strict": true,
+    "lib": [
+      "deno.window",
+      "dom",
+      "ESNext"
+    ]
+  },
+  "nodeModulesDir": "auto",
+  "workspace": [
+    "./apps/api-app",
+    "./apps/web-app"
+  ],
+  "tasks": {
+    "api-app:dev": "cd ./apps/api-app && deno task start",
+    "web-app:dev": "cd ./apps/web-app && deno task dev",
+    "dev": "deno task api-app:dev & deno task web-app:dev"
   }
 }

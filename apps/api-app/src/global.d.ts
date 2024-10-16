@@ -8,7 +8,7 @@ declare namespace NodeJS {
     DB_USERNAME: string;
     DB_PASSWORD: string;
     DB_LOGGING: string;
-    APP_HOST: URL;
+    APP_HOST: string;
     API_PORT: string;
     APP_PORT: string;
   }

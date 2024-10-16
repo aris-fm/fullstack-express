@@ -1,40 +1,72 @@
-import jwt, { type VerifyErrors } from "jsonwebtoken";
-import type { Request, Response } from "express";
+import { create, getNumericDate, verify } from "jsr:@zaubrik/djwt";
+import type { Context } from "jsr:@oak/oak/context";
 import { users } from "../../models/users.ts";
-import { hourInMilis, oneHour } from "../../const/datetime.ts";
+import { hourInMilis } from "../../const/datetime.ts";
 
-export const refreshToken = async (req: Request, res: Response) => {
+// Utility function to convert a secret string to a CryptoKey
+function createKey(secret: string): Promise<CryptoKey> {
+  return crypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(secret),
+    { name: "HMAC", hash: "SHA-512" },
+    false,
+    ["sign", "verify"],
+  );
+}
+
+export const refreshToken = async (ctx: Context) => {
   try {
-    const { refreshToken } = req.cookies;
-    if (!refreshToken) return res.sendStatus(401);
+    // Get the refresh token from cookies
+    const refreshToken = await ctx.cookies.get("refreshToken");
+    if (!refreshToken) {
+      ctx.response.status = 401;
+      return;
+    }
+
+    // Find the user with the refresh token in the database
     const user = await users.findOne({
       where: {
         refresh_token: refreshToken,
       },
     });
-    if (!user) return res.sendStatus(403);
-    jwt.verify(
-      refreshToken,
-      Deno.env.get("REFRESH_TOKEN_SECRET"),
-      (err: VerifyErrors | null) => {
-        if (err) return res.sendStatus(403);
-        const { id, name, email } = user;
-        const accessToken = jwt.sign(
-          { id, name, email },
-          Deno.env.get("ACCESS_TOKEN_SECRET"),
-          {
-            expiresIn: oneHour,
-          },
-        );
-        res.cookie("accessToken", accessToken, {
-          httpOnly: true,
-          maxAge: hourInMilis,
-          secure: Deno.env.get("ENV") !== "development",
-        });
-        res.json({ accessToken });
-      },
-    );
+    if (!user) {
+      ctx.response.status = 403;
+      return;
+    }
+
+    // Convert the refresh token secret to a CryptoKey
+    const refreshKey = await createKey(Deno.env.get("REFRESH_TOKEN_SECRET")!);
+
+    // Verify the refresh token
+    try {
+      await verify(refreshToken, refreshKey);
+
+      // Generate a new access token
+      const { id, name, email } = user;
+      const accessKey = await createKey(Deno.env.get("ACCESS_TOKEN_SECRET")!);
+      const accessToken = await create(
+        { alg: "HS512", typ: "JWT" },
+        { id, name, email, exp: getNumericDate(hourInMilis) },
+        accessKey,
+      );
+
+      // Set the new access token in cookies
+      ctx.cookies.set("accessToken", accessToken, {
+        httpOnly: true,
+        maxAge: hourInMilis / 1000,
+        secure: Deno.env.get("ENV") !== "development",
+      });
+
+      // Respond with the new access token
+      ctx.response.status = 200;
+      ctx.response.body = { accessToken };
+    } catch (err) {
+      console.error(err);
+      ctx.response.status = 403; // Invalid or expired refresh token
+    }
   } catch (error) {
     console.error(error);
+    ctx.response.status = 500;
+    ctx.response.body = { msg: "Internal server error" };
   }
 };

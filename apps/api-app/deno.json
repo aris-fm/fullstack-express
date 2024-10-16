@@ -1,0 +1,12 @@
+{
+  "name": "@app/api-app",
+  "exports": "./src/index.ts",
+  "tasks": {
+    "start": "deno run -A --env --watch ./src/index.ts",
+    "test": "deno test --allow-net",
+    "lint": "deno lint"
+  },
+  "imports": {
+    "mysql2": "npm:mysql2"
+  }
+}

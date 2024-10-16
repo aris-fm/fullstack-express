@@ -1,10 +1,13 @@
-import express from "express";
+import { Router } from "jsr:@oak/oak/router";
 import { authRouter } from "./auth.ts";
 import { userRouter } from "./users.ts";
 
-const router = express.Router();
+const router = new Router();
 
-router.use("/auth", authRouter);
-router.use("/users", userRouter);
+// Use the authRouter for /auth routes
+router.use("/auth", authRouter.routes(), authRouter.allowedMethods());
+
+// Use the userRouter for /users routes
+router.use("/users", userRouter.routes(), userRouter.allowedMethods());
 
 export default router;

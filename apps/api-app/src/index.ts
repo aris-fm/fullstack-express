@@ -1,28 +1,23 @@
-import express from "express";
+import { Application } from "jsr:@oak/oak/application";
+import "jsr:@std/dotenv/load";
+import { oakCors } from "jsr:@tajpouria/cors";
 import { db } from "./config/db.ts";
 import router from "./routes/index.ts";
-import cookieParser from "cookie-parser";
-import cors from "cors";
-import "jsr:@std/dotenv/load";
 
-const app = express();
-
+const app = new Application();
+const port = +Deno.env.get("API_PORT")!;
 try {
   await db.authenticate();
 } catch (error) {
   console.error(error);
 }
 
-const port = +Deno.env.get("API_PORT")!;
+app.use(oakCors({
+  credentials: true,
+  origin: `${Deno.env.get("APP_HOST")!}:${Deno.env.get("APP_PORT")!}`,
+}));
 
-app.use(
-  cors({
-    credentials: true,
-    origin: `${Deno.env.get("APP_HOST")!}:${Deno.env.get("APP_PORT")!}`,
-  }),
-);
-app.use(cookieParser());
-app.use(express.json());
-app.use(router);
+app.use(router.routes());
 
-app.listen(port, () => console.log(`Server running at port ${port}`));
+console.info(`Server running at port ${port}`);
+await app.listen({ port });

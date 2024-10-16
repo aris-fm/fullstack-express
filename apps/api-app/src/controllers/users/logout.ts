@@ -1,15 +1,26 @@
+import type { Context } from "jsr:@oak/oak/context";
 import { users } from "../../models/users.ts";
-import type { Request, Response } from "express";
 
-export const logout = async (req: Request, res: Response) => {
-  const { refreshToken } = req.cookies;
-  if (!refreshToken) return res.sendStatus(204);
+export const logout = async (ctx: Context) => {
+  const { cookies, response } = ctx;
+  const refreshToken = await cookies.get("refreshToken");
+
+  if (!refreshToken) {
+    response.status = 204;
+    return;
+  }
+
   const user = await users.findOne({
     where: {
       refresh_token: refreshToken,
     },
   });
-  if (!user) return res.sendStatus(204);
+
+  if (!user) {
+    response.status = 204;
+    return;
+  }
+
   await users.update(
     { refresh_token: null },
     {
@@ -18,7 +29,9 @@ export const logout = async (req: Request, res: Response) => {
       },
     },
   );
-  res.clearCookie("refreshToken");
-  res.clearCookie("accessToken");
-  return res.sendStatus(200);
+
+  await cookies.delete("refreshToken");
+  await cookies.delete("accessToken");
+
+  response.status = 200;
 };

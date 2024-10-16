@@ -1,4 +1,4 @@
-import { DataTypes, type Model } from "sequelize";
+import { DataTypes, type Model } from "npm:sequelize";
 import { db } from "../config/db.ts";
 import type { User } from "../types.ts";
 
