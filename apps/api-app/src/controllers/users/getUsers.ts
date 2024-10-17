@@ -1,5 +1,5 @@
 import type { Context } from "jsr:@oak/oak/context";
-import { users as usersModel } from "../../models/users.ts";
+import { users as usersModel } from "@/models/users.ts";
 
 export const getUsers = async (ctx: Context) => {
   try {

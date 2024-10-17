@@ -2,18 +2,9 @@ import { verify } from "jsr:@ts-rex/bcrypt";
 import { create, getNumericDate } from "jsr:@zaubrik/djwt";
 import { users } from "../../models/users.ts";
 import { hourInMilis, monthInMilis } from "../../const/datetime.ts";
-import { Op } from "npm:sequelize";
+import { Op } from "sequelize";
 import type { Context } from "jsr:@oak/oak/context";
-
-function createKey(secret: string): Promise<CryptoKey> {
-  return crypto.subtle.importKey(
-    "raw",
-    new TextEncoder().encode(secret),
-    { name: "HMAC", hash: "SHA-512" },
-    false,
-    ["sign", "verify"],
-  );
-}
+import { createCryptoKey } from "@/utils/createCryptoKey.ts";
 
 // JWT Secret keys from environment variables
 const accessTokenSecret = Deno.env.get("ACCESS_TOKEN_SECRET")!;
@@ -45,8 +36,8 @@ export const login = async (ctx: Context) => {
 
     const { id, name, email: userEmail } = user;
 
-    const accessKey = await createKey(accessTokenSecret);
-    const refreshKey = await createKey(refreshTokenSecret);
+    const accessKey = await createCryptoKey(accessTokenSecret);
+    const refreshKey = await createCryptoKey(refreshTokenSecret);
 
     // Create JWT tokens
     const accessToken = await create(

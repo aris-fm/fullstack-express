@@ -1,17 +1,7 @@
 import type { Next } from "jsr:@oak/oak/middleware";
 import type { Context } from "jsr:@oak/oak/context";
 import { verify } from "jsr:@zaubrik/djwt";
-
-// Utility function to convert a secret string to a CryptoKey
-function createKey(secret: string): Promise<CryptoKey> {
-  return crypto.subtle.importKey(
-    "raw",
-    new TextEncoder().encode(secret),
-    { name: "HMAC", hash: "SHA-512" },
-    false,
-    ["sign", "verify"],
-  );
-}
+import { createCryptoKey } from "@/utils/createCryptoKey.ts";
 
 // Middleware to verify the JWT token
 export const verifyToken = async (ctx: Context, next: Next) => {
@@ -27,7 +17,9 @@ export const verifyToken = async (ctx: Context, next: Next) => {
     }
 
     // Convert the access token secret to a CryptoKey
-    const accessKey = await createKey(Deno.env.get("ACCESS_TOKEN_SECRET")!);
+    const accessKey = await createCryptoKey(
+      Deno.env.get("ACCESS_TOKEN_SECRET")!,
+    );
 
     // Verify the token
     const decoded = await verify(token, accessKey);

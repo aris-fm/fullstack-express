@@ -1,8 +1,8 @@
 import { Application } from "jsr:@oak/oak/application";
 import "jsr:@std/dotenv/load";
 import { oakCors } from "jsr:@tajpouria/cors";
-import { db } from "./config/db.ts";
-import router from "./routes/index.ts";
+import { db } from "@/config/db.ts";
+import router from "@/routes/index.ts";
 
 const app = new Application();
 const port = +Deno.env.get("API_PORT")!;

@@ -1,6 +1,6 @@
 import * as bcrypt from "https://deno.land/x/bcrypt@v0.4.1/mod.ts";
 import type { Context } from "jsr:@oak/oak/context";
-import { users } from "../../models/users.ts";
+import { users } from "@/models/users.ts";
 
 export const registerUser = async (ctx: Context) => {
   const { name, email, password, confPassword, username } = await ctx.request

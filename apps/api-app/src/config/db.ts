@@ -1,4 +1,4 @@
-import { Sequelize } from "npm:sequelize";
+import { Sequelize } from "sequelize";
 import "jsr:@std/dotenv/load";
 
 export const db = new Sequelize(

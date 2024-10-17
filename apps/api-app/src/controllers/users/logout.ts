@@ -1,5 +1,5 @@
 import type { Context } from "jsr:@oak/oak/context";
-import { users } from "../../models/users.ts";
+import { users } from "@/models/users.ts";
 
 export const logout = async (ctx: Context) => {
   const { cookies, response } = ctx;

@@ -13,7 +13,8 @@
     "postcss": "npm:postcss",
     "tailwindcss": "npm:tailwindcss",
     "@types/react": "npm:@types/react",
-    "@types/react-dom": "npm:@types/react-dom"
+    "@types/react-dom": "npm:@types/react-dom",
+    "vite": "npm:vite"
   },
   "tasks": {
     "dev": "vite",

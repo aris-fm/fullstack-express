@@ -1,18 +1,8 @@
 import { create, getNumericDate, verify } from "jsr:@zaubrik/djwt";
 import type { Context } from "jsr:@oak/oak/context";
-import { users } from "../../models/users.ts";
-import { hourInMilis } from "../../const/datetime.ts";
-
-// Utility function to convert a secret string to a CryptoKey
-function createKey(secret: string): Promise<CryptoKey> {
-  return crypto.subtle.importKey(
-    "raw",
-    new TextEncoder().encode(secret),
-    { name: "HMAC", hash: "SHA-512" },
-    false,
-    ["sign", "verify"],
-  );
-}
+import { users } from "@/models/users.ts";
+import { hourInMilis } from "@/const/datetime.ts";
+import { createCryptoKey } from "@/utils/createCryptoKey.ts";
 
 export const refreshToken = async (ctx: Context) => {
   try {
@@ -35,7 +25,9 @@ export const refreshToken = async (ctx: Context) => {
     }
 
     // Convert the refresh token secret to a CryptoKey
-    const refreshKey = await createKey(Deno.env.get("REFRESH_TOKEN_SECRET")!);
+    const refreshKey = await createCryptoKey(
+      Deno.env.get("REFRESH_TOKEN_SECRET")!,
+    );
 
     // Verify the refresh token
     try {
@@ -43,7 +35,9 @@ export const refreshToken = async (ctx: Context) => {
 
       // Generate a new access token
       const { id, name, email } = user;
-      const accessKey = await createKey(Deno.env.get("ACCESS_TOKEN_SECRET")!);
+      const accessKey = await createCryptoKey(
+        Deno.env.get("ACCESS_TOKEN_SECRET")!,
+      );
       const accessToken = await create(
         { alg: "HS512", typ: "JWT" },
         { id, name, email, exp: getNumericDate(hourInMilis) },

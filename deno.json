@@ -16,5 +16,11 @@
     "api-app:dev": "cd ./apps/api-app && deno task start",
     "web-app:dev": "cd ./apps/web-app && deno task dev",
     "dev": "deno task api-app:dev & deno task web-app:dev"
+  },
+  "fmt": {
+    "exclude": ["**/*.vite", "node_modules", "**/*dist"]
+  },
+  "lint": {
+    "exclude": ["**/*.vite", "node_modules", "**/*dist"]
   }
 }

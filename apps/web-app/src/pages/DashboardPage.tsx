@@ -56,6 +56,7 @@ const DashboardPage = () => {
               <tr>
                 <th>No.</th>
                 <th>Name</th>
+                <th>Username</th>
                 <th>Email</th>
               </tr>
             </thead>
@@ -64,6 +65,7 @@ const DashboardPage = () => {
                 <tr key={user.id}>
                   <td>{i + 1 * (+offset + 1)}.</td>
                   <td>{user.name}</td>
+                  <td>{user.username}</td>
                   <td>{user.email}</td>
                 </tr>
               ))}
