@@ -1,4 +1,4 @@
-import * as bcrypt from "https://deno.land/x/bcrypt@v0.4.1/mod.ts";
+import { genSalt, hash } from "https://deno.land/x/bcrypt@v0.4.1/mod.ts";
 import type { Context } from "jsr:@oak/oak/context";
 import { users } from "@/models/users.ts";
 
@@ -16,14 +16,14 @@ export const registerUser = async (ctx: Context) => {
   }
 
   // Generate salt and hash the password
-  const salt = await bcrypt.genSalt();
-  const hash = await bcrypt.hash(password, salt);
+  const salt = await genSalt();
+  const hashedPassword = await hash(password, salt);
   try {
     // Create the user in the database
     await users.create({
       name,
       email,
-      password: hash,
+      password: hashedPassword,
       username,
     });
 

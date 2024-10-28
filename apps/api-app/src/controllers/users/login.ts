@@ -1,7 +1,7 @@
 import { verify } from "jsr:@ts-rex/bcrypt";
 import { create, getNumericDate } from "jsr:@zaubrik/djwt";
-import { users } from "../../models/users.ts";
-import { hourInMilis, monthInMilis } from "../../const/datetime.ts";
+import { users } from "@/models/users.ts";
+import { hourInMilis, monthInMilis } from "@/const/datetime.ts";
 import { Op } from "sequelize";
 import type { Context } from "jsr:@oak/oak/context";
 import { createCryptoKey } from "@/utils/createCryptoKey.ts";
