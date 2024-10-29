@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { JSXElement } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import LoginPage from "@/pages/LoginPage.tsx";
 import RegisterPage from "@/pages/RegisterPage.tsx";
@@ -7,7 +7,7 @@ import DashboardPage from "@/pages/DashboardPage.tsx";
 import { PublicRoutes } from "@/routes/PublicRoutes.tsx";
 import { AuthProvider } from "@/context/AuthContext.tsx";
 
-function App() {
+function App(): JSXElement {
   return (
     <BrowserRouter>
       <AuthProvider>

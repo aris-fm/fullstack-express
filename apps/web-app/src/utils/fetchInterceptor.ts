@@ -1,4 +1,4 @@
-import { refreshToken } from "@/apis/auth";
+import { refreshToken } from "@/apis/auth.ts";
 
 export interface RefreshTokenResponse {
   accessToken: string;

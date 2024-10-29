@@ -1,8 +1,6 @@
-export interface BaseUser {
-  id: number;
-  name: string;
-  email: string;
-  password: string;
+import type { User as CommonUser } from "@common/types/User.ts";
+
+export interface BaseUser extends Omit<CommonUser, "username"> {
   username?: string;
 }
 

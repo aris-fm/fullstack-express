@@ -1,38 +1,37 @@
 import { genSalt, hash } from "https://deno.land/x/bcrypt@v0.4.1/mod.ts";
 import type { Context } from "jsr:@oak/oak/context";
-import { users } from "@/models/users.ts";
+import { User } from "@/models/Users.ts";
+import {
+  handle4xxError,
+  handleServerError,
+} from "@common/utils/errorHandler.ts";
+import { handle2xxRequest } from "@common/utils/successHandler.ts";
 
 export const registerUser = async (ctx: Context) => {
   const { name, email, password, confPassword, username } = await ctx.request
     .body.json();
 
-  // Check if password matches confirm password
   if (password !== confPassword) {
-    ctx.response.status = 400;
-    ctx.response.body = {
-      msg: "Password & Confirm Password didn't match",
-    };
+    handle4xxError({
+      ctx,
+      status: 400,
+      message: "Password & Confirm Password didn't match",
+    });
     return;
   }
 
-  // Generate salt and hash the password
   const salt = await genSalt();
   const hashedPassword = await hash(password, salt);
   try {
-    // Create the user in the database
-    await users.create({
+    await User.create({
       name,
       email,
       password: hashedPassword,
       username,
     });
 
-    // Respond with success message
-    ctx.response.status = 201;
-    ctx.response.body = { msg: "Register success!" };
+    handle2xxRequest({ ctx, status: 201, body: { msg: "Register success!" } });
   } catch (error) {
-    console.error(error);
-    ctx.response.status = 500; // Handle error appropriately
-    ctx.response.body = { msg: "Internal server error" };
+    handleServerError(ctx, error);
   }
 };

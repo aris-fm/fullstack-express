@@ -1,5 +1,8 @@
 {
+  "name": "@app/web-app",
+  "exports": "./src/App.tsx",
   "imports": {
+    "@common/types/": "../../common/types/",
     "@/": "./src/",
     "axios": "npm:axios",
     "jwt-decode": "npm:jwt-decode",

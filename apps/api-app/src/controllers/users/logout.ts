@@ -1,5 +1,5 @@
 import type { Context } from "jsr:@oak/oak/context";
-import { users } from "@/models/users.ts";
+import { User } from "@/models/Users.ts";
 
 export const logout = async (ctx: Context) => {
   const { cookies, response } = ctx;
@@ -10,7 +10,7 @@ export const logout = async (ctx: Context) => {
     return;
   }
 
-  const user = await users.findOne({
+  const user = await User.findOne({
     where: {
       refresh_token: refreshToken,
     },
@@ -21,7 +21,7 @@ export const logout = async (ctx: Context) => {
     return;
   }
 
-  await users.update(
+  await User.update(
     { refresh_token: null },
     {
       where: {

@@ -1,25 +1,23 @@
 import type { Context } from "jsr:@oak/oak/context";
-import { users as usersModel } from "@/models/users.ts";
+import { User as usersModel } from "@/models/Users.ts";
+import { handleServerError } from "@common/utils/errorHandler.ts";
+import { handle2xxRequest } from "@common/utils/successHandler.ts";
 
 export const getUsers = async (ctx: Context) => {
   try {
-    // Get query parameters from the URL
     const limit = ctx.request.url.searchParams.get("limit") || "3";
     const offset = ctx.request.url.searchParams.get("offset") || "0";
+    const sort = ctx.request.url.searchParams.get("sort") || "DESC";
 
-    // Fetch users from the database
     const users = await usersModel.findAndCountAll({
+      order: [["createdAt", sort]],
       offset: +offset,
       limit: +limit,
       attributes: ["id", "username", "name", "email"],
     });
 
-    // Set response body to the fetched users
-    ctx.response.status = 200;
-    ctx.response.body = users;
+    handle2xxRequest({ ctx, status: 200, body: users });
   } catch (error) {
-    console.error(error);
-    ctx.response.status = 500;
-    ctx.response.body = { msg: "Internal server error" };
+    handleServerError(ctx, error);
   }
 };

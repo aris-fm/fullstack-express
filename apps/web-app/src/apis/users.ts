@@ -11,7 +11,9 @@ export const fetchUsers = async (
   { limit = "", offset = "" }: BaseGetRequest = {},
 ): Promise<WithPagination<User>> => {
   const response = await interceptedFetch(
-    `${apiUrl.users}?${new URLSearchParams({ limit, offset }).toString()}`,
+    `${apiUrl.users}?${
+      new URLSearchParams({ limit, offset, sort: "DESC" }).toString()
+    }`,
   );
   const users: WithPagination<User> = await response.json();
   return users;

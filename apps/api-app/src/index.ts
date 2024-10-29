@@ -8,6 +8,7 @@ const app = new Application();
 const port = +Deno.env.get("API_PORT")!;
 try {
   await db.authenticate();
+  await db.sync();
 } catch (error) {
   console.error(error);
 }

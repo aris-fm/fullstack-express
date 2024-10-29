@@ -1,10 +1,15 @@
 import { verify } from "jsr:@ts-rex/bcrypt";
 import { create, getNumericDate } from "jsr:@zaubrik/djwt";
-import { users } from "@/models/users.ts";
+import { User } from "@/models/Users.ts";
 import { hourInMilis, monthInMilis } from "@/const/datetime.ts";
 import { Op } from "sequelize";
 import type { Context } from "jsr:@oak/oak/context";
 import { createCryptoKey } from "@/utils/createCryptoKey.ts";
+import {
+  handle4xxError,
+  handleServerError,
+} from "@common/utils/errorHandler.ts";
+import { handle2xxRequest } from "@common/utils/successHandler.ts";
 
 // JWT Secret keys from environment variables
 const accessTokenSecret = Deno.env.get("ACCESS_TOKEN_SECRET")!;
@@ -15,22 +20,20 @@ export const login = async (ctx: Context) => {
     const { email, username, password } = await ctx.request.body.json();
     const emailOrUsername = email || username;
 
-    const user = await users.findOne({
+    const user = await User.findOne({
       where: {
         [Op.or]: [{ email: emailOrUsername }, { username: emailOrUsername }],
       },
     });
 
     if (!user) {
-      ctx.response.status = 404;
-      ctx.response.body = { msg: "User not found" };
+      handle4xxError({ ctx, status: 404, message: "User not found" });
       return;
     }
 
-    const match = await verify(password, user.password);
+    const match = verify(password, user.password);
     if (!match) {
-      ctx.response.status = 400;
-      ctx.response.body = { msg: "Wrong Password" };
+      handle4xxError({ ctx, status: 400, message: "Wrong Password" });
       return;
     }
 
@@ -39,7 +42,6 @@ export const login = async (ctx: Context) => {
     const accessKey = await createCryptoKey(accessTokenSecret);
     const refreshKey = await createCryptoKey(refreshTokenSecret);
 
-    // Create JWT tokens
     const accessToken = await create(
       { alg: "HS512", typ: "JWT" },
       { id, name, email: userEmail, exp: getNumericDate(hourInMilis) },
@@ -51,8 +53,7 @@ export const login = async (ctx: Context) => {
       refreshKey,
     );
 
-    // Update user's refresh token in the database
-    await users.update(
+    await User.update(
       { refresh_token: refreshToken },
       {
         where: {
@@ -61,7 +62,6 @@ export const login = async (ctx: Context) => {
       },
     );
 
-    // Set cookies for tokens
     ctx.cookies.set("refreshToken", refreshToken, {
       httpOnly: true,
       maxAge: monthInMilis / 1000,
@@ -74,11 +74,8 @@ export const login = async (ctx: Context) => {
       secure: Deno.env.get("ENV") !== "development",
     });
 
-    ctx.response.status = 200;
-    ctx.response.body = { accessToken };
+    handle2xxRequest({ ctx, status: 200, body: { accessToken } });
   } catch (error) {
-    ctx.response.status = 500;
-    ctx.response.body = { msg: "Internal server error" };
-    console.error(error);
+    handleServerError(ctx, error);
   }
 };

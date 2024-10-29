@@ -21,6 +21,11 @@
     "exclude": ["**/*.vite", "node_modules", "**/*dist"]
   },
   "lint": {
-    "exclude": ["**/*.vite", "node_modules", "**/*dist"]
+    "exclude": ["**/*.vite", "node_modules", "**/*dist"],
+    "rules": {
+      "exclude": [
+        "verbatim-module-syntax"
+      ]
+    }
   }
 }
