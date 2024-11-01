@@ -1,7 +1,7 @@
 import React, { useReducer, useState } from "react";
-import type { UserRegister } from "@/types.ts";
 import { createUsers } from "@/apis/users.ts";
 import { useNavigate } from "react-router";
+import type { UserRegister } from "@/types/User.ts";
 
 enum UserRegisterType {
   EDIT_NAME = "EDIT_NAME",
@@ -27,7 +27,7 @@ const userData: UserRegister = {
 const reducer = (
   state: UserRegister,
   action: UserRegisterAction,
-): UserRegister => {
+) => {
   switch (action.type) {
     case UserRegisterType.EDIT_NAME:
       return {

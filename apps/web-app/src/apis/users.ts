@@ -1,11 +1,7 @@
-import type {
-  BaseGetRequest,
-  User,
-  UserRegister,
-  WithPagination,
-} from "@/types.ts";
+import type { BaseGetRequest, WithPagination } from "@/types/Fetch.ts";
 import { interceptedFetch } from "@/utils/fetchInterceptor.ts";
 import { apiUrl } from "@/apis/urls.ts";
+import type { User, UserRegister } from "@/types/User.ts";
 
 export const fetchUsers = async (
   { limit = "", offset = "" }: BaseGetRequest = {},

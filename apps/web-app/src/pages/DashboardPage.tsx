@@ -1,8 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { fetchUsers } from "@/apis/users.ts";
-import type { User, WithPagination } from "@/types.ts";
+import type { WithPagination } from "@/types/Fetch.ts";
 import { useAuth } from "@/context/AuthContext.tsx";
 import { useSearchParams } from "react-router-dom";
+import type { User } from "@/types/User.ts";
 
 const DEFAULT_LIMIT = 5;
 const DEFAULT_OFFSET = 0;

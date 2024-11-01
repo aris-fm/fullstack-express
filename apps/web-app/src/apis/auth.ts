@@ -1,4 +1,4 @@
-import type { UserLogin } from "@/types.ts";
+import type { UserLogin } from "@/types/User.ts";
 import type { RefreshTokenResponse } from "@/utils/fetchInterceptor.ts";
 import { apiUrl } from "@/apis/urls.ts";
 
